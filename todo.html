@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Todo · Anonymous Ebook Brand</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --surface3: #222222;
+    --border: #2a2a2a;
+    --accent: #c8a96e;
+    --text: #e8e4dc;
+    --muted: #555;
+    --muted2: #777;
+    --p0: #c8a96e;
+    --p1: #7eb8c8;
+    --p2: #c87e9a;
+    --p3: #8bc87e;
+    --p4: #b87ec8;
+    --done-text: #3a3a3a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 52px;
+  }
+  .nav-brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2px;
+  }
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .nav-link:hover { color: var(--text); border-color: var(--border); }
+  .nav-link.active {
+    color: var(--text);
+    border-color: var(--border);
+    background: var(--surface);
+  }
+
+  /* HEADER */
+  .header {
+    padding: 56px 48px 40px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: end;
+  }
+  .header-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .header-title em { font-style: italic; color: var(--accent); }
+  .header-sub {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: var(--muted2);
+    font-size: 16px;
+    margin-top: 8px;
+  }
+
+  /* PROGRESS PANEL */
+  .progress-panel {
+    min-width: 240px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    border-radius: 2px;
+  }
+  .progress-overall-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress-overall-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .progress-overall-num span {
+    font-size: 14px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+  }
+  .progress-bar-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .phase-mini-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .phase-mini-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .phase-mini-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .phase-mini-label { flex: 1; color: var(--muted); }
+  .phase-mini-count { color: var(--text); }
+
+  /* FILTER BAR */
+  .filter-bar {
+    padding: 16px 48px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+  }
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+  .filter-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { color: var(--text); border-color: var(--muted); }
+  .filter-btn.active {
+    color: var(--bg);
+    background: var(--text);
+    border-color: var(--text);
+  }
+  .filter-btn[data-phase="0"].active { background: var(--p0); border-color: var(--p0); }
+  .filter-btn[data-phase="1"].active { background: var(--p1); border-color: var(--p1); }
+  .filter-btn[data-phase="2"].active { background: var(--p2); border-color: var(--p2); }
+  .filter-btn[data-phase="3"].active { background: var(--p3); border-color: var(--p3); }
+  .filter-btn[data-phase="4"].active { background: var(--p4); border-color: var(--p4); }
+
+  .reset-btn {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .reset-btn:hover { color: #e87e7e; border-color: #e87e7e; }
+
+  /* MAIN */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 48px 120px;
+  }
+
+  /* PHASE GROUP */
+  .phase-group {
+    margin-bottom: 48px;
+    transition: opacity 0.2s;
+  }
+  .phase-group.hidden { display: none; }
+
+  .phase-group-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 4px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-group-bar {
+    width: 3px;
+    height: 32px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .phase-group-title-wrap {}
+  .phase-group-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .phase-group-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .phase-group-progress {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+  .phase-group-progress strong {
+    font-size: 18px;
+    font-weight: 500;
+    display: block;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .phase-progress-track {
+    width: 80px;
+    height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .phase-progress-fill {
+    height: 100%;
+    border-radius: 1px;
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* TODO ITEM */
+  .todo-item {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .todo-item:last-child { border-bottom: none; }
+  .todo-item:hover { background: rgba(255,255,255,0.015); }
+
+  .todo-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 0;
+    cursor: pointer;
+  }
+
+  /* CHECKBOX */
+  .todo-check {
+    width: 20px; height: 20px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .todo-item.done .todo-check {
+    background: var(--phase-color, var(--accent));
+    border-color: var(--phase-color, var(--accent));
+  }
+  .todo-check::after {
+    content: '';
+    width: 5px; height: 9px;
+    border-right: 2px solid #000;
+    border-bottom: 2px solid #000;
+    transform: rotate(45deg) translate(-1px, -1px);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .todo-item.done .todo-check::after { opacity: 1; }
+
+  .todo-body { flex: 1; min-width: 0; }
+
+  .todo-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 3px;
+  }
+  .todo-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+    line-height: 1.4;
+    transition: color 0.2s;
+  }
+  .todo-item.done .todo-title {
+    color: var(--done-text);
+    text-decoration: line-through;
+    text-decoration-color: var(--border);
+  }
+  .todo-desc {
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
+    color: var(--muted2);
+    line-height: 1.5;
+    transition: color 0.2s;
+  }
+  .todo-item.done .todo-desc { color: var(--done-text); }
+
+  .todo-expand-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 0;
+    transition: color 0.15s;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .todo-expand-btn:hover { color: var(--text); }
+
+  /* SUBTASKS */
+  .subtask-panel {
+    padding: 0 0 16px 36px;
+    display: none;
+  }
+  .subtask-panel.open { display: block; }
+
+  .subtask-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(42,42,42,0.5);
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .subtask-item:last-child { border-bottom: none; }
+  .subtask-item:hover { opacity: 0.8; }
+
+  .subtask-check {
+    width: 14px; height: 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .subtask-item.done .subtask-check {
+    background: rgba(255,255,255,0.1);
+    border-color: var(--muted);
+  }
+  .subtask-check::after {
+    content: '';
+    width: 3px; height: 6px;
+    border-right: 1.5px solid var(--muted);
+    border-bottom: 1.5px solid var(--muted);
+    transform: rotate(45deg) translate(-1px, -1px);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .subtask-item.done .subtask-check::after { opacity: 1; }
+
+  .subtask-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted2);
+    line-height: 1.6;
+    transition: color 0.2s;
+  }
+  .subtask-item.done .subtask-text {
+    color: var(--done-text);
+    text-decoration: line-through;
+    text-decoration-color: var(--border);
+  }
+
+  .tool-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 10px;
+  }
+  .tool-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* COMPLETION BANNER */
+  .phase-complete-banner {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(139,200,126,0.06);
+    border: 1px solid rgba(139,200,126,0.2);
+    border-radius: 2px;
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--p3);
+  }
+  .phase-complete-banner.show { display: flex; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 80px 40px;
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 18px;
+  }
+
+  /* FOOTER */
+  .footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    padding: 12px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 50;
+  }
+  .footer-stat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-stat strong { color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .nav { padding: 0 20px; }
+    .header { padding: 32px 20px 24px; grid-template-columns: 1fr; }
+    .progress-panel { display: none; }
+    .filter-bar { padding: 12px 20px; }
+    .main { padding: 32px 20px 100px; }
+    .footer { padding: 12px 20px; }
+    .header-title { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">The Pattern Finder · Roadmap</div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Timeline</a>
+    <a href="todo.html" class="nav-link active">Todo</a>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-eyebrow">Execution Checklist · 23 Tasks · 50+ Subtasks</div>
+    <div class="header-title">Do the <em>Work</em></div>
+    <div class="header-sub">하나씩 체크할 때마다 브랜드가 만들어진다.</div>
+  </div>
+  <div class="progress-panel">
+    <div class="progress-overall-label">Overall Progress</div>
+    <div class="progress-overall-num" id="overall-pct">0<span>%</span></div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="overall-bar" style="width:0%"></div>
+    </div>
+    <div class="phase-mini-list" id="phase-mini-list"></div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Filter</span>
+  <button class="filter-btn active" data-phase="all">All</button>
+  <button class="filter-btn" data-phase="0" style="--btn-color:var(--p0)">Phase 0 · Foundation</button>
+  <button class="filter-btn" data-phase="1" style="--btn-color:var(--p1)">Phase 1 · Create</button>
+  <button class="filter-btn" data-phase="2" style="--btn-color:var(--p2)">Phase 2 · Launch</button>
+  <button class="filter-btn" data-phase="3" style="--btn-color:var(--p3)">Phase 3 · Grow</button>
+  <button class="filter-btn" data-phase="4" style="--btn-color:var(--p4)">Phase 4 · Scale</button>
+  <button class="filter-btn" data-phase="todo">미완료만</button>
+  <button class="reset-btn" id="reset-btn">체크 초기화</button>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-stat">완료 <strong id="footer-done">0</strong> / <strong id="footer-total">0</strong> tasks</div>
+  <div class="footer-stat">서브태스크 <strong id="footer-sub-done">0</strong> / <strong id="footer-sub-total">0</strong></div>
+  <div class="footer-stat">Next: <strong id="footer-next">—</strong></div>
+</div>
+
+<script>
+const PHASES = [
+  {
+    id: 0, color: 'var(--p0)', label: 'Phase 0', name: 'Foundation', period: 'Week 1–2',
+    tasks: [
+      {
+        id: 't01', num: '01',
+        title: 'BRAND NAME — 브랜드명 3개 후보 선정',
+        desc: 'The Pattern Finder / The Quiet Scientist / Brain Hacks Lab 등 후보 만들기. 기준: 기억하기 쉽고, 구글 검색 시 중복 없어야 함.',
+        subtasks: [
+          'Namecheckr.com 에서 SNS 계정명 중복 확인',
+          'Google 검색 시 혼동될 브랜드 없는지 확인',
+          '최종 1개 확정 후 Namecheap에서 도메인 여부 확인',
+        ],
+        tools: ['Namecheckr', 'Google', 'Namecheap']
+      },
+      {
+        id: 't02', num: '02',
+        title: 'PERSONA BIO — 페르소나 바이오 작성',
+        desc: '완전 허구 OK. "No PhD, just 10 years of obsessive observation" 톤으로 작성. 독자와 동급 위치 잡기.',
+        subtasks: [
+          '50단어 short bio 작성 (X/Twitter 프로필용)',
+          '150단어 long bio 작성 (Gumroad About 섹션용)',
+          'Claude에게 3가지 톤 버전 생성 요청 후 선택',
+        ],
+        tools: ['Claude AI']
+      },
+      {
+        id: 't03', num: '03',
+        title: 'GUMROAD ACCOUNT — 계정 생성 및 설정',
+        desc: '브랜드 이메일(Gmail 신규 생성) → Gumroad 가입 → 프로필 완성. 본명/본인 정보 절대 입력 금지.',
+        subtasks: [
+          '브랜드 전용 Gmail 생성 (brandname@gmail.com)',
+          'Gumroad 가입 → 브랜드명으로 프로필 완성',
+          'Canva로 로고형 프로필 아이콘 제작',
+          'Payout 설정 (Wise 달러 계좌 추천)',
+        ],
+        tools: ['Gmail', 'Gumroad', 'Canva', 'Wise']
+      },
+      {
+        id: 't04', num: '04',
+        title: 'X ACCOUNT — 트위터 브랜드 계정 생성',
+        desc: '브랜드 계정으로 운영. 얼굴 없이 그래픽 + 텍스트만으로 운영 가능.',
+        subtasks: [
+          '핸들: @thepatternfinder 등 브랜드명 동일하게',
+          '헤더 이미지: Canva로 "Brain science for real life" 배너',
+          '첫 핀드 트윗 작성: 브랜드 선언문 형태',
+          '뇌과학 팩트 트윗 3개 예약 발행',
+        ],
+        tools: ['X/Twitter', 'Canva', 'Buffer']
+      },
+      {
+        id: 't05', num: '05',
+        title: 'BRAND KIT — Canva 브랜드킷 세팅',
+        desc: '책 커버·내지·SNS 포스트를 일관되게 만들기 위한 컬러팔레트 + 폰트 조합 고정.',
+        subtasks: [
+          'Primary color 1개 + 강조색 1개 선정',
+          '폰트 조합: 제목용 serif + 본문용 sans-serif',
+          '책 표지 마스터 템플릿 1개 완성',
+          'SNS 포스트 정사각형 템플릿 1개 완성',
+        ],
+        tools: ['Canva Free/Pro']
+      },
+    ]
+  },
+  {
+    id: 1, color: 'var(--p1)', label: 'Phase 1', name: 'Create', period: 'Week 3–6',
+    tasks: [
+      {
+        id: 't06', num: '06',
+        title: 'TOPIC RESEARCH — 주제 선정 및 경쟁 분석',
+        desc: 'Gumroad에서 유사 주제 책 검색 → 리뷰 읽기 → 독자가 원하지만 아직 없는 것 찾기.',
+        subtasks: [
+          'Gumroad에서 "habits", "relationships", "psychology" 검색',
+          '상위 5개 책 리뷰 읽고 불만 포인트 메모',
+          'Reddit r/selfimprovement 인기글 주제 파악',
+          '최종 주제 1개 확정 + 책 제목 3개 후보 작성',
+        ],
+        tools: ['Gumroad', 'Reddit', 'Claude AI']
+      },
+      {
+        id: 't07', num: '07',
+        title: 'OUTLINE — 목차 7챕터 구성',
+        desc: '챕터 순서: 문제공감 → 왜 실패하나 → 뇌과학 원리 → 3단계 방법 → 실패패턴 → 고급편 → 적용 체크리스트',
+        subtasks: [
+          'Claude에게 목차 3가지 버전 생성 요청',
+          '가장 설득력 있는 버전 선택·수정',
+          '각 챕터 예상 분량 결정 (A4 3-4p 기준)',
+          '각 챕터에 인용할 연구/논문 이름 1개씩 배정',
+        ],
+        tools: ['Claude AI', 'Notion/메모앱']
+      },
+      {
+        id: 't08', num: '08',
+        title: 'WRITING — 챕터별 초안 작성',
+        desc: 'Claude 활용 흐름: 내가 핵심 아이디어 제공 → Claude가 영어 초안 → 내가 톤·내용 검수 → 반복.',
+        subtasks: [
+          '하루 1챕터 목표 (약 600-800 단어)',
+          '각 챕터마다 논문/연구 이름 1개 이상 포함',
+          '문체 확인: 짧은 문장, 직접적, 도발적 톤',
+          '인포그래픽 자리 [GRAPHIC] 태그로 표시',
+          '전체 분량: A4 20-30페이지 목표',
+        ],
+        tools: ['Claude AI', 'Google Docs']
+      },
+      {
+        id: 't09', num: '09',
+        title: 'EDITING — 영어 교정',
+        desc: 'Grammarly Premium으로 1차 교정 → Hemingway Editor로 가독성 체크 (목표: Grade 8 이하)',
+        subtasks: [
+          'Grammarly: 문법·어색한 표현 수정',
+          'Hemingway Editor: 긴 문장 쪼개기, 수동태 제거',
+          'Claude에게 "rewrite to be more direct" 요청',
+          'Readability score Grade 8 이하 달성 확인',
+        ],
+        tools: ['Grammarly', 'Hemingway App', 'Claude AI']
+      },
+      {
+        id: 't10', num: '10',
+        title: 'PDF DESIGN — Canva 내지 디자인',
+        desc: '1페이지 최대 200-250단어. 여백 많이. 독자가 읽다가 멈추는 느낌 없게.',
+        subtasks: [
+          '표지: 제목 + 한줄 서브타이틀 + 브랜드명',
+          '챕터 타이틀 페이지 디자인',
+          '본문 페이지 템플릿 완성',
+          '마지막 페이지: "Get more at [gumroad URL]" CTA',
+          'Export: PDF Standard (화면용)',
+        ],
+        tools: ['Canva Pro']
+      },
+    ]
+  },
+  {
+    id: 2, color: 'var(--p2)', label: 'Phase 2', name: 'Launch', period: 'Week 7–8',
+    tasks: [
+      {
+        id: 't11', num: '11',
+        title: 'GUMROAD PAGE — 상품 페이지 작성',
+        desc: '세일즈 카피가 80%. 내용 설명보다 독자의 고통·욕망 건드리기.',
+        subtasks: [
+          '제목: 숫자 or 질문형으로 (Why She\'s Actually Mad…)',
+          '서브타이틀: "The brain science behind [problem]"',
+          '"After reading this, you will…" 불릿 5개 작성',
+          '가격 설정: $9–12 (첫 책은 낮게 시작)',
+          '미리보기: 챕터1 첫 2페이지 Gumroad에 업로드',
+        ],
+        tools: ['Gumroad', 'Claude AI']
+      },
+      {
+        id: 't12', num: '12',
+        title: 'MEDIUM POST — 무료 챕터 발행',
+        desc: '챕터 1 전체를 Medium에 무료 공개. 마지막 문단에만 Gumroad 링크. 구걸 금지.',
+        subtasks: [
+          '제목 2버전 작성 후 클릭률 높은 것 선택',
+          '태그: psychology, self-improvement, brain, habits',
+          'Medium Partner Program 신청',
+          'Gumroad 링크를 마지막 CTA 문단에만 배치',
+        ],
+        tools: ['Medium', 'Claude AI']
+      },
+      {
+        id: 't13', num: '13',
+        title: 'REDDIT SEED — 가치글 3개 작성',
+        desc: '절대 홍보 금지. 진짜 가치 있는 글 올리고 → 댓글에서 자연스럽게 링크 언급.',
+        subtasks: [
+          'r/selfimprovement: "I studied 50 [topic]…" 형식 글',
+          'r/psychology: 뇌과학 원리 설명글',
+          'r/relationship_advice: 고민 답변 형식',
+          '브랜드 Reddit 프로필 bio에 Gumroad 링크만',
+        ],
+        tools: ['Reddit', 'Claude AI']
+      },
+      {
+        id: 't14', num: '14',
+        title: 'X THREADS — 스레드 주 2회 발행 시작',
+        desc: '포맷: "Your brain does X when Y happens. Here\'s why: 🧵" → 10개 트윗 스레드',
+        subtasks: [
+          '첫 스레드 완성 + 스케줄 등록',
+          '스레드 마지막에 Gumroad 링크 CTA',
+          'Typefully 또는 Buffer로 예약 발행 세팅',
+          '유사 계정 5개 팔로우 + 의미있는 댓글 달기',
+        ],
+        tools: ['X/Twitter', 'Typefully', 'Buffer']
+      },
+      {
+        id: 't15', num: '15',
+        title: 'FIRST SALES — 첫 판매 10부 목표',
+        desc: '숫자보다 구매 행동 데이터가 목표. 어디서 유입됐는지 파악.',
+        subtasks: [
+          'Gumroad Analytics에서 트래픽 소스 확인',
+          '구매자 이메일 리스트 수집 시작 확인',
+          '리뷰 요청 이메일 자동화 ON (Gumroad 기본 제공)',
+          '가장 효과적인 채널 1개 파악 후 집중',
+        ],
+        tools: ['Gumroad Analytics']
+      },
+    ]
+  },
+  {
+    id: 3, color: 'var(--p3)', label: 'Phase 3', name: 'Grow', period: 'Month 3–4',
+    tasks: [
+      {
+        id: 't16', num: '16',
+        title: 'FEEDBACK LOOP — 독자 피드백 분석',
+        desc: '구매자 리뷰·DM 읽기. "이 부분 더 알고 싶어요"가 다음 책 주제.',
+        subtasks: [
+          'Gumroad 리뷰 전수 읽기 + 키워드 메모',
+          'Reddit 댓글에서 독자 반응 파악',
+          'X DM으로 "뭐가 제일 유용했나요?" 질문',
+          '다음 책 주제 1개 확정',
+        ],
+        tools: ['Gumroad', 'Reddit', 'X/Twitter']
+      },
+      {
+        id: 't17', num: '17',
+        title: 'BOOK 2 — 두 번째 책 집필',
+        desc: '1권 경험으로 속도 2배 가능. 1권과 시리즈 느낌으로 연결.',
+        subtasks: [
+          '표지 디자인 시리즈 통일 ("Part 2 of 3")',
+          '1권 구매자에게 얼리버드 이메일 발송',
+          '가격 설정: $11–14 (점진적 상승)',
+          'Medium에 챕터1 무료 공개',
+        ],
+        tools: ['Claude AI', 'Canva', 'Gumroad']
+      },
+      {
+        id: 't18', num: '18',
+        title: 'SUBSTACK — 뉴스레터 시작',
+        desc: '주 1회 "Brain Byte" 형식 뉴스레터. 무료 구독 → 책 구매 전환 깔때기.',
+        subtasks: [
+          'Substack 브랜드 계정 생성',
+          '포맷 확정: 짧은 인사이트 1개 + 책 링크',
+          '첫 호 발행',
+          'Medium 글 하단에 Substack 구독 CTA 추가',
+        ],
+        tools: ['Substack', 'Claude AI']
+      },
+      {
+        id: 't19', num: '19',
+        title: 'BUNDLE — 2권 묶음 판매',
+        desc: '책 2권 + 보너스 체크리스트 PDF 묶어서 30% 할인으로 판매.',
+        subtasks: [
+          'Gumroad "Bundle" 기능으로 2권 묶기',
+          '보너스: 1페이지 요약 체크리스트 PDF 제작',
+          '번들 가격: 개별 합산의 65-70% 수준',
+          '번들 전용 Gumroad 상품 페이지 카피 작성',
+        ],
+        tools: ['Gumroad', 'Canva']
+      },
+    ]
+  },
+  {
+    id: 4, color: 'var(--p4)', label: 'Phase 4', name: 'Scale', period: 'Month 5–6',
+    tasks: [
+      {
+        id: 't20', num: '20',
+        title: 'BOOK 3 + SERIES — 3권 완성 및 시리즈 완결',
+        desc: '3권 완성되면 "The Complete Brain Science Bundle" 3권 묶음 출시.',
+        subtasks: [
+          '3권 커버 시리즈 디자인 통일',
+          '전체 번들 가격 설정: $29–34',
+          '각 책 내부에 "Part X of 3" 시리즈 표시',
+          '3권 묶음 Gumroad 번들 상품 생성',
+        ],
+        tools: ['Canva', 'Gumroad', 'Claude AI']
+      },
+      {
+        id: 't21', num: '21',
+        title: 'SEO — Medium SEO 최적화',
+        desc: '기존 글 업데이트 + 새 글로 유기적 검색 트래픽 늘리기.',
+        subtasks: [
+          '가장 조회수 높은 글 리프레시 업데이트',
+          '검색 잘 되는 제목으로 A/B 변경 테스트',
+          '월 4개 새 아티클 발행 루틴 확립',
+          'Medium stats에서 추천 vs 검색 비율 파악',
+        ],
+        tools: ['Medium', 'Claude AI']
+      },
+      {
+        id: 't22', num: '22',
+        title: 'EMAIL LIST — 구매자 리스트 활용',
+        desc: '100명 이상 쌓이면 신간 출시 이메일이 즉각 매출로 연결.',
+        subtasks: [
+          'Gumroad 이메일 리스트 export',
+          '신간 출시 48시간 전 이메일 예고 발송',
+          '구매자 전용 5% 추가 할인 쿠폰 생성',
+          'Gumroad 팔로워 vs 구매자 전환율 확인',
+        ],
+        tools: ['Gumroad', 'Mailchimp (선택)']
+      },
+      {
+        id: 't23', num: '23',
+        title: '$1K MILESTONE — 첫 $1,000 달성 및 분석',
+        desc: '누적 $1,000 = 이 모델이 검증된 것. 이후 자동화·스케일링 단계로 이동.',
+        subtasks: [
+          '어느 채널이 가장 효과적이었는지 분석',
+          '가장 잘 팔린 책 → 광고비 $50 투자 테스트',
+          '월 수익 $500 → $1K → $5K 로드맵 작성',
+          '다음 페이즈: 유료 광고 or 콘텐츠 에이전시 검토',
+        ],
+        tools: ['Gumroad Analytics', 'Notion']
+      },
+    ]
+  },
+];
+
+// STATE
+let state = {};
+const STORAGE_KEY = 'ebook_roadmap_v1';
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) state = JSON.parse(saved);
+  } catch(e) {}
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function toggleTask(id) {
+  state[id] = !state[id];
+  saveState();
+  render();
+  updateStats();
+}
+function toggleSubtask(taskId, idx) {
+  const key = `${taskId}_s${idx}`;
+  state[key] = !state[key];
+  saveState();
+  render();
+  updateStats();
+}
+
+// STATS
+function getStats() {
+  let totalTasks = 0, doneTasks = 0;
+  let totalSub = 0, doneSub = 0;
+  const phaseStats = [];
+  PHASES.forEach(p => {
+    let pt = 0, pd = 0;
+    p.tasks.forEach(t => {
+      totalTasks++; pt++;
+      if (state[t.id]) { doneTasks++; pd++; }
+      t.subtasks.forEach((_, i) => {
+        totalSub++;
+        if (state[`${t.id}_s${i}`]) doneSub++;
+      });
+    });
+    phaseStats.push({ id: p.id, color: p.color, label: p.label, name: p.name, total: pt, done: pd });
+  });
+  return { totalTasks, doneTasks, totalSub, doneSub, phaseStats };
+}
+
+function updateStats() {
+  const s = getStats();
+  const pct = s.totalTasks ? Math.round(s.doneTasks / s.totalTasks * 100) : 0;
+
+  document.getElementById('overall-pct').innerHTML = `${pct}<span>%</span>`;
+  document.getElementById('overall-bar').style.width = pct + '%';
+  document.getElementById('footer-done').textContent = s.doneTasks;
+  document.getElementById('footer-total').textContent = s.totalTasks;
+  document.getElementById('footer-sub-done').textContent = s.doneSub;
+  document.getElementById('footer-sub-total').textContent = s.totalSub;
+
+  // Next task
+  let nextLabel = '모두 완료! 🎉';
+  outer: for (const p of PHASES) {
+    for (const t of p.tasks) {
+      if (!state[t.id]) { nextLabel = t.title.split('—')[0].trim(); break outer; }
+    }
+  }
+  document.getElementById('footer-next').textContent = nextLabel;
+
+  // Phase mini list
+  const mini = document.getElementById('phase-mini-list');
+  if (mini) {
+    mini.innerHTML = s.phaseStats.map(ps => `
+      <div class="phase-mini-item">
+        <div class="phase-mini-dot" style="background:${ps.color}"></div>
+        <span class="phase-mini-label">${ps.label}</span>
+        <span class="phase-mini-count">${ps.done}/${ps.total}</span>
+      </div>
+    `).join('');
+  }
+}
+
+// EXPAND STATE
+let expandedTasks = new Set();
+
+function render() {
+  const main = document.getElementById('main');
+  const activeFilter = document.querySelector('.filter-btn.active')?.dataset.phase || 'all';
+
+  main.innerHTML = PHASES.map(phase => {
+    const phaseDone = phase.tasks.filter(t => state[t.id]).length;
+    const phaseTotal = phase.tasks.length;
+    const phasePct = Math.round(phaseDone / phaseTotal * 100);
+
+    const hidden = (activeFilter !== 'all' && activeFilter !== String(phase.id) &&
+      !(activeFilter === 'todo' && phase.tasks.some(t => !state[t.id])));
+
+    const tasksHtml = phase.tasks.map(task => {
+      const isDone = !!state[task.id];
+      if (activeFilter === 'todo' && isDone) return '';
+      const isExpanded = expandedTasks.has(task.id);
+      const subDone = task.subtasks.filter((_, i) => state[`${task.id}_s${i}`]).length;
+
+      return `
+        <div class="todo-item ${isDone ? 'done' : ''}" style="--phase-color:${phase.color}" id="item-${task.id}">
+          <div class="todo-main" onclick="toggleTask('${task.id}')">
+            <div class="todo-check"></div>
+            <div class="todo-body">
+              <div class="todo-num">TASK ${task.num} · ${phase.label}</div>
+              <div class="todo-title">${task.title}</div>
+              <div class="todo-desc">${task.desc}</div>
+            </div>
+            <button class="todo-expand-btn" onclick="event.stopPropagation(); toggleExpand('${task.id}')">
+              ${isExpanded ? '▲ 접기' : '▼ ' + task.subtasks.length + '개 서브태스크' + (subDone > 0 ? ' ('+subDone+'/'+task.subtasks.length+')' : '')}
+            </button>
+          </div>
+          <div class="subtask-panel ${isExpanded ? 'open' : ''}">
+            ${task.subtasks.map((s, i) => {
+              const sDone = !!state[`${task.id}_s${i}`];
+              return `<div class="subtask-item ${sDone ? 'done' : ''}" onclick="toggleSubtask('${task.id}', ${i})">
+                <div class="subtask-check"></div>
+                <div class="subtask-text">${s}</div>
+              </div>`;
+            }).join('')}
+            <div class="tool-chips">
+              ${task.tools.map(t => `<span class="tool-chip">${t}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="phase-group ${hidden ? 'hidden' : ''}" id="phase-${phase.id}">
+        <div class="phase-group-header">
+          <div class="phase-group-bar" style="background:${phase.color}"></div>
+          <div class="phase-group-title-wrap">
+            <div class="phase-group-eyebrow" style="color:${phase.color}">${phase.label} · ${phase.period}</div>
+            <div class="phase-group-title">${phase.name}</div>
+          </div>
+          <div class="phase-group-progress">
+            <strong style="color:${phase.color}">${phasePct}%</strong>
+            ${phaseDone}/${phaseTotal}
+            <div class="phase-progress-track">
+              <div class="phase-progress-fill" style="background:${phase.color}; width:${phasePct}%"></div>
+            </div>
+          </div>
+        </div>
+        ${tasksHtml || '<div style="padding:16px 0;font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">이 단계 모두 완료 ✓</div>'}
+        ${phaseDone === phaseTotal ? `<div class="phase-complete-banner show">✓ Phase ${phase.id} Complete — ${phase.name} 단계 완료!</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleExpand(taskId) {
+  if (expandedTasks.has(taskId)) expandedTasks.delete(taskId);
+  else expandedTasks.add(taskId);
+  render();
+}
+
+// FILTER
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  });
+});
+
+// RESET
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (confirm('모든 체크를 초기화할까요?')) {
+    state = {};
+    saveState();
+    render();
+    updateStats();
+  }
+});
+
+// INIT
+loadState();
+render();
+updateStats();
+</script>
+</body>
+</html>

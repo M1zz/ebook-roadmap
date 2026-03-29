@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anonymous Ebook Brand Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #2a2a2a;
+    --accent: #c8a96e;
+    --accent2: #7eb8c8;
+    --accent3: #c87e9a;
+    --text: #e8e4dc;
+    --muted: #666;
+    --phase0: #c8a96e;
+    --phase1: #7eb8c8;
+    --phase2: #c87e9a;
+    --phase3: #8bc87e;
+    --phase4: #b87ec8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 60px 80px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-left {}
+  .header-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .header-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .header-sub {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 17px;
+    margin-top: 10px;
+  }
+  .header-right {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 2;
+  }
+  .header-right span {
+    display: block;
+    color: var(--accent);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  /* PHASE LEGEND */
+  .legend {
+    display: flex;
+    gap: 0;
+    padding: 0 80px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 24px 16px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-right: 1px solid var(--border);
+    margin-right: 24px;
+    cursor: default;
+  }
+  .legend-item:last-child { border-right: none; }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* TIMELINE CANVAS */
+  .canvas {
+    padding: 0 80px 80px;
+    overflow-x: auto;
+  }
+
+  /* WEEK ROW HEADER */
+  .timeline-header {
+    display: grid;
+    grid-template-columns: 200px repeat(12, 1fr);
+    gap: 0;
+    padding: 24px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+    min-width: 1200px;
+  }
+  .timeline-header-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .week-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-align: center;
+    padding: 4px;
+  }
+  .week-label.month-start {
+    color: var(--accent);
+    border-left: 1px solid var(--border);
+  }
+
+  /* PHASE SECTIONS */
+  .phase-section {
+    min-width: 1200px;
+    margin-bottom: 2px;
+    overflow: visible;
+  }
+
+  .phase-header-row {
+    display: grid;
+    grid-template-columns: 200px repeat(12, 1fr);
+    align-items: stretch;
+    border-top: 1px solid var(--border);
+  }
+  .phase-label-cell {
+    padding: 20px 0 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-right: 1px solid var(--border);
+    padding-right: 20px;
+  }
+  .phase-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .phase-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .phase-timeline-cell {
+    grid-column: span 12;
+    padding: 16px 0;
+    position: relative;
+  }
+  .phase-bar-container {
+    position: relative;
+    height: 36px;
+    display: flex;
+    align-items: center;
+  }
+  .phase-bar {
+    height: 4px;
+    border-radius: 2px;
+    position: absolute;
+    opacity: 0.4;
+  }
+  .phase-milestones {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  /* TASK ROWS */
+  .task-row {
+    display: grid;
+    grid-template-columns: 200px repeat(12, 1fr);
+    align-items: center;
+    min-height: 48px;
+    border-top: 1px solid rgba(42,42,42,0.5);
+    transition: background 0.2s;
+  }
+  .task-row:hover {
+    background: rgba(255,255,255,0.02);
+  }
+  .task-info {
+    padding: 10px 20px 10px 0;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .task-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .task-detail {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+  .task-bar-area {
+    grid-column: span 12;
+    position: relative;
+    height: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    overflow: visible;
+  }
+  .task-bar {
+    position: absolute;
+    height: 28px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    color: rgba(0,0,0,0.75);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: visible;
+    cursor: default;
+    transition: filter 0.2s, transform 0.2s;
+    z-index: 2;
+  }
+  .task-bar:hover {
+    filter: brightness(1.15);
+    transform: scaleY(1.05);
+    z-index: 10;
+  }
+  .task-dot {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    border: 2px solid var(--bg);
+    cursor: default;
+    transition: transform 0.2s;
+    z-index: 5;
+  }
+  .task-dot:hover {
+    transform: translateX(-50%) scale(1.5);
+  }
+
+  /* DIVIDER */
+  .phase-divider {
+    height: 32px;
+    min-width: 1200px;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 210px;
+    border-top: 2px solid var(--border);
+  }
+
+  /* DETAIL CARDS SECTION */
+  .detail-section {
+    padding: 60px 80px;
+    border-top: 1px solid var(--border);
+  }
+  .detail-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .detail-section-sub {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 48px;
+  }
+
+  .phase-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 2px;
+  }
+
+  .phase-card {
+    background: var(--surface);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .phase-card:hover {
+    background: var(--surface2);
+  }
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+  }
+  .phase-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .phase-card-title-group {}
+  .phase-card-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .phase-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .phase-card-timespan {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 1px solid;
+    border-radius: 2px;
+    white-space: nowrap;
+    opacity: 0.7;
+  }
+  .task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .task-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    padding-top: 2px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .task-content {}
+  .task-title-main {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+    line-height: 1.4;
+  }
+  .task-desc {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .task-desc strong {
+    color: rgba(232,228,220,0.6);
+    font-style: italic;
+  }
+  .subtask-list {
+    margin-top: 6px;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .subtask-list li {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    padding-left: 12px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .subtask-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    opacity: 0.4;
+    font-size: 9px;
+  }
+
+  /* TOOLS SECTION */
+  .tools-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .tool-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  .footer {
+    padding: 32px 80px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-left {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .footer-right {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* SCROLL HINT */
+  .scroll-hint {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    padding: 12px 80px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  @media (max-width: 768px) {
+    .header { padding: 32px; }
+    .header-title { font-size: 32px; }
+    .header-right { display: none; }
+    .legend { padding: 0 32px; }
+    .canvas { padding: 0 0 60px; }
+    .detail-section { padding: 40px 32px; }
+    .footer { padding: 24px 32px; flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav style="position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid #2a2a2a;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:52px;">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:#c8a96e;text-transform:uppercase;">The Pattern Finder · Roadmap</div>
+  <div style="display:flex;gap:2px;">
+    <a href="index.html" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#e8e4dc;text-decoration:none;padding:8px 16px;border:1px solid #2a2a2a;border-radius:2px;background:#111;">Timeline</a>
+    <a href="todo.html" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#555;text-decoration:none;padding:8px 16px;border:1px solid transparent;border-radius:2px;">Todo</a>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-eyebrow">Anonymous English Ebook Brand · Full Execution Roadmap</div>
+    <div class="header-title">From <em>Zero</em> to<br>First $1,000</div>
+    <div class="header-sub">Brain science meets everyday problems — built anonymously, sold globally.</div>
+  </div>
+  <div class="header-right">
+    <span>5</span>PHASES
+    <span>12</span>WEEKS CORE
+    <span>40+</span>TASKS
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-dot" style="background:var(--phase0)"></div>
+    Phase 0 · Foundation
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:var(--phase1)"></div>
+    Phase 1 · Create
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:var(--phase2)"></div>
+    Phase 2 · Launch
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:var(--phase3)"></div>
+    Phase 3 · Grow
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:var(--phase4)"></div>
+    Phase 4 · Scale
+  </div>
+  <div class="legend-item" style="margin-left:auto; border-right:none">
+    <div class="legend-dot" style="background:var(--text); opacity:0.3"></div>
+    Milestone
+  </div>
+</div>
+
+<div class="scroll-hint">← scroll horizontally to see full 6-month timeline →</div>
+
+<!-- TIMELINE CANVAS -->
+<div class="canvas">
+
+  <!-- WEEK HEADER -->
+  <div class="timeline-header">
+    <div class="timeline-header-label" style="font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">
+      TASK
+    </div>
+    <div class="week-label month-start">W1</div>
+    <div class="week-label">W2</div>
+    <div class="week-label month-start">W3</div>
+    <div class="week-label">W4</div>
+    <div class="week-label month-start">W5</div>
+    <div class="week-label">W6</div>
+    <div class="week-label month-start">W7</div>
+    <div class="week-label">W8</div>
+    <div class="week-label month-start">M3</div>
+    <div class="week-label">M4</div>
+    <div class="week-label month-start">M5</div>
+    <div class="week-label">M6</div>
+  </div>
+
+  <!-- PHASE 0 -->
+  <div class="phase-section">
+    <!-- Task 1 -->
+    <div class="task-row" style="border-top: 2px solid var(--phase0);">
+      <div class="task-info">
+        <div class="task-name" style="color:var(--phase0)">PERSONA NAME</div>
+        <div class="task-detail">브랜드명 확정</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase0); left:calc(0/12*100%); width:calc(1/12*100% - 4px);">브랜드명 3개 후보</div>
+        <div class="task-dot" style="background:var(--phase0); left:calc(1/12*100%); top:50%; transform:translate(-50%,-50%)"></div>
+      </div>
+    </div>
+    <!-- Task 2 -->
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">BRAND IDENTITY</div>
+        <div class="task-detail">바이오·어조·색상</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase0); opacity:0.7; left:calc(1/12*100%); width:calc(1/12*100% - 4px);">Canva 브랜드킷</div>
+      </div>
+    </div>
+    <!-- Task 3 -->
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">PLATFORM SETUP</div>
+        <div class="task-detail">Gumroad + X 계정</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase0); opacity:0.55; left:calc(1/12*100%); width:calc(1/12*100% - 4px);">계정 생성·설정</div>
+        <div class="task-dot" style="background:var(--phase0); left:calc(2/12*100%); top:50%; transform:translate(-50%,-50%)"></div>
+      </div>
+    </div>
+    <!-- Task 4 -->
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">TOOLS SETUP</div>
+        <div class="task-detail">Claude·Canva·Grammarly</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase0); opacity:0.4; left:0; width:calc(2/12*100% - 4px);">도구 세팅</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-section">
+    <div class="task-row" style="border-top: 2px solid var(--phase1);">
+      <div class="task-info">
+        <div class="task-name" style="color:var(--phase1)">TOPIC RESEARCH</div>
+        <div class="task-detail">주제 선정·경쟁 분석</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase1); left:calc(2/12*100%); width:calc(1/12*100% - 4px);">Gumroad 경쟁책 분석</div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">OUTLINE</div>
+        <div class="task-detail">목차·챕터 구성</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase1); opacity:0.8; left:calc(3/12*100%); width:calc(1/12*100% - 4px);">7챕터 구조 확정</div>
+        <div class="task-dot" style="background:var(--phase1); left:calc(3/12*100%); top:50%; transform:translate(-50%,-50%)"></div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">WRITING</div>
+        <div class="task-detail">초안 작성 (Claude)</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase1); opacity:0.65; left:calc(3/12*100%); width:calc(2/12*100% - 4px);">A4 25p 초안</div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">EDITING</div>
+        <div class="task-detail">Grammarly · 교정</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase1); opacity:0.5; left:calc(4/12*100%); width:calc(1/12*100% - 4px);">영어 교정 완료</div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">PDF DESIGN</div>
+        <div class="task-detail">Canva 템플릿·레이아웃</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase1); opacity:0.4; left:calc(5/12*100%); width:calc(1/12*100% - 4px);">최종 PDF 완성</div>
+        <div class="task-dot" style="background:var(--phase1); left:calc(6/12*100%); top:50%; transform:translate(-50%,-50%)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-section">
+    <div class="task-row" style="border-top: 2px solid var(--phase2);">
+      <div class="task-info">
+        <div class="task-name" style="color:var(--phase2)">GUMROAD PAGE</div>
+        <div class="task-detail">상품 페이지 작성</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase2); left:calc(6/12*100%); width:calc(1/12*100% - 4px);">세일즈카피·커버</div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">FREE CHAPTER</div>
+        <div class="task-detail">Medium 무료 공개</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase2); opacity:0.8; left:calc(6/12*100%); width:calc(1/12*100% - 4px);">챕터1 Medium 발행</div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">REDDIT SEED</div>
+        <div class="task-detail">r/selfimprovement 가치글</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase2); opacity:0.65; left:calc(6/12*100%); width:calc(2/12*100% - 4px);">가치글 3개 → CTA</div>
+        <div class="task-dot" style="background:var(--phase2); left:calc(7/12*100%); top:50%; transform:translate(-50%,-50%)"></div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">X THREADS</div>
+        <div class="task-detail">Brain fact 스레드</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase2); opacity:0.5; left:calc(7/12*100%); width:calc(1/12*100% - 4px);">주 2회 스레드</div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">FIRST SALES 🎯</div>
+        <div class="task-detail">첫 판매 목표</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-dot" style="background:var(--phase2); width:14px; height:14px; left:calc(8/12*100%); top:50%; transform:translate(-50%,-50%); border-width:3px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-section">
+    <div class="task-row" style="border-top: 2px solid var(--phase3);">
+      <div class="task-info">
+        <div class="task-name" style="color:var(--phase3)">FEEDBACK LOOP</div>
+        <div class="task-detail">독자 피드백 수집</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase3); left:calc(8/12*100%); width:calc(2/12*100% - 4px);">리뷰·DM 분석</div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">BOOK 2 WRITE</div>
+        <div class="task-detail">두 번째 책 집필</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase3); opacity:0.8; left:calc(8/12*100%); width:calc(2/12*100% - 4px);">시리즈 2권</div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">NEWSLETTER</div>
+        <div class="task-detail">Substack 뉴스레터</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase3); opacity:0.65; left:calc(9/12*100%); width:calc(2/12*100% - 4px);">주 1회 발행</div>
+        <div class="task-dot" style="background:var(--phase3); left:calc(10/12*100%); top:50%; transform:translate(-50%,-50%)"></div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">BUNDLE</div>
+        <div class="task-detail">2권 묶음 판매</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase3); opacity:0.5; left:calc(10/12*100%); width:calc(2/12*100% - 4px);">30% 할인 번들</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-section">
+    <div class="task-row" style="border-top: 2px solid var(--phase4);">
+      <div class="task-info">
+        <div class="task-name" style="color:var(--phase4)">BOOK 3 + SEO</div>
+        <div class="task-detail">3권·Medium SEO</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-bar" style="background:var(--phase4); left:calc(10/12*100%); width:calc(2/12*100% - 4px);">3권 + SEO 최적화</div>
+      </div>
+    </div>
+    <div class="task-row">
+      <div class="task-info">
+        <div class="task-name">$1K MILESTONE 🏆</div>
+        <div class="task-detail">첫 $1,000 달성</div>
+      </div>
+      <div class="task-bar-area">
+        <div class="task-dot" style="background:var(--phase4); width:16px; height:16px; left:calc(12/12*100%); top:50%; transform:translate(-50%,-50%); border-width:3px;"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end canvas -->
+
+<!-- DETAIL CARDS -->
+<div class="detail-section">
+  <div class="detail-section-title">Detailed Task Breakdown</div>
+  <div class="detail-section-sub">각 단계별 세세한 할 일 목록 — Freeform 붙여넣기용</div>
+
+  <div class="phase-cards-grid">
+
+    <!-- PHASE 0 CARD -->
+    <div class="phase-card" style="--card-color: var(--phase0);">
+      <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--phase0);"></div>
+      <div class="phase-card-header">
+        <div class="phase-card-title-group">
+          <div class="phase-card-eyebrow" style="color:var(--phase0)">Phase 0 · Week 1–2</div>
+          <div class="phase-card-title">Foundation<br>기반 구축</div>
+        </div>
+        <div class="phase-card-timespan" style="color:var(--phase0); border-color:var(--phase0);">2 WKS</div>
+      </div>
+      <ul class="task-list">
+        <li class="task-item">
+          <span class="task-num">01</span>
+          <div class="task-content">
+            <div class="task-title-main">브랜드명 3개 후보 선정</div>
+            <div class="task-desc">The Pattern Finder / The Quiet Scientist / Brain Hacks Lab 등 후보 만들기. <strong>기준: 기억하기 쉽고, 구글 검색 시 중복 없어야 함.</strong></div>
+            <ul class="subtask-list">
+              <li>Namecheckr.com 에서 SNS 계정명 중복 확인</li>
+              <li>Google 검색 시 혼동될 브랜드 없는지 확인</li>
+              <li>최종 1개 확정, 도메인 여부 확인 (Namecheap)</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">02</span>
+          <div class="task-content">
+            <div class="task-title-main">페르소나 바이오 작성</div>
+            <div class="task-desc"><strong>완전 허구 OK.</strong> "No PhD, just 10 years of obsessive observation" 톤으로 작성. 독자와 동급 위치 잡기.</div>
+            <ul class="subtask-list">
+              <li>50단어 short bio (X/Twitter 프로필용)</li>
+              <li>150단어 long bio (Gumroad About 섹션용)</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">03</span>
+          <div class="task-content">
+            <div class="task-title-main">Gumroad 계정 생성</div>
+            <div class="task-desc">브랜드 이메일(Gmail 신규 생성) → Gumroad 가입 → 프로필 완성. <strong>본명/본인 정보 절대 입력 금지.</strong></div>
+            <ul class="subtask-list">
+              <li>브랜드 전용 Gmail 생성 (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="214353404f454f404c4461464c40484d0f424e4c">[email&#160;protected]</a>)</li>
+              <li>Gumroad 프로필 사진: Canva로 로고형 아이콘 제작</li>
+              <li>Payout 설정 (Stripe 또는 PayPal — 주의: 실명 필요, 별도 계좌 추천)</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">04</span>
+          <div class="task-content">
+            <div class="task-title-main">X (Twitter) 계정 생성</div>
+            <div class="task-desc">브랜드 계정으로 운영. 얼굴 없이 <strong>그래픽 + 텍스트</strong>만으로 운영 가능.</div>
+            <ul class="subtask-list">
+              <li>핸들: @thepatternfinder 등 브랜드명 동일하게</li>
+              <li>헤더: "Brain science for real life" 등 한줄 컨셉</li>
+              <li>첫 3개 트윗 예약 작성 (뇌과학 팩트 3개)</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">05</span>
+          <div class="task-content">
+            <div class="task-title-main">Canva 브랜드킷 세팅</div>
+            <div class="task-desc">책 커버·내지·SNS 포스트를 일관되게 만들기 위한 <strong>컬러팔레트 + 폰트 조합</strong> 고정.</div>
+            <ul class="subtask-list">
+              <li>Primary color: 다크 톤 1개 + 강조색 1개</li>
+              <li>폰트: 제목용 serif + 본문용 sans-serif</li>
+              <li>표지 템플릿 1개 완성 (재사용 가능하게)</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      <div class="tools-row">
+        <span class="tool-chip">Namecheckr</span>
+        <span class="tool-chip">Canva Free</span>
+        <span class="tool-chip">Gmail</span>
+        <span class="tool-chip">Gumroad</span>
+        <span class="tool-chip">X/Twitter</span>
+      </div>
+    </div>
+
+    <!-- PHASE 1 CARD -->
+    <div class="phase-card" style="">
+      <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--phase1);"></div>
+      <div class="phase-card-header">
+        <div class="phase-card-title-group">
+          <div class="phase-card-eyebrow" style="color:var(--phase1)">Phase 1 · Week 3–6</div>
+          <div class="phase-card-title">Create<br>첫 책 제작</div>
+        </div>
+        <div class="phase-card-timespan" style="color:var(--phase1); border-color:var(--phase1);">4 WKS</div>
+      </div>
+      <ul class="task-list">
+        <li class="task-item">
+          <span class="task-num">06</span>
+          <div class="task-content">
+            <div class="task-title-main">주제 최종 선정</div>
+            <div class="task-desc">Gumroad에서 유사 주제 책 검색 → 리뷰 읽기 → 독자가 <strong>원하지만 아직 없는 것</strong> 찾기.</div>
+            <ul class="subtask-list">
+              <li>Gumroad: "habits", "relationships", "psychology" 검색</li>
+              <li>상위 5개 책 리뷰 읽고 불만 포인트 정리</li>
+              <li>Reddit r/selfimprovement 인기글 주제 파악</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">07</span>
+          <div class="task-content">
+            <div class="task-title-main">목차 7챕터 구성</div>
+            <div class="task-desc">챕터 순서: 문제공감 → 왜 실패하나 → 뇌과학 원리 → 3단계 방법 → 실패패턴 → 고급편 → 적용 체크리스트</div>
+            <ul class="subtask-list">
+              <li>Claude에게 목차 3가지 버전 생성 요청</li>
+              <li>가장 설득력 있는 버전 선택·수정</li>
+              <li>각 챕터 예상 분량: A4 3-4페이지</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">08</span>
+          <div class="task-content">
+            <div class="task-title-main">챕터별 초안 작성</div>
+            <div class="task-desc"><strong>Claude 활용 흐름:</strong> 내가 핵심 아이디어 제공 → Claude가 영어 초안 → 내가 톤·내용 검수 → 반복.</div>
+            <ul class="subtask-list">
+              <li>하루 1챕터 목표 (약 600-800 단어)</li>
+              <li>각 챕터마다 논문/연구 이름 1개 이상 포함</li>
+              <li>문체 확인: 짧은 문장, 직접적, 도발적</li>
+              <li>인포그래픽 들어갈 자리 [GRAPHIC] 태그로 표시</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">09</span>
+          <div class="task-content">
+            <div class="task-title-main">영어 교정</div>
+            <div class="task-desc">Grammarly Premium으로 1차 교정 → Hemingway Editor로 가독성 체크 (목표: Grade 8 이하)</div>
+            <ul class="subtask-list">
+              <li>Grammarly: 문법·어색한 표현 수정</li>
+              <li>Hemingway: 긴 문장 쪼개기, 수동태 제거</li>
+              <li>Claude에게 "더 직접적으로 rewrite" 요청 가능</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">10</span>
+          <div class="task-content">
+            <div class="task-title-main">Canva PDF 디자인</div>
+            <div class="task-desc">1페이지 최대 200-250단어. 여백 많이. <strong>독자가 읽다가 멈추는 느낌 없게.</strong></div>
+            <ul class="subtask-list">
+              <li>표지: 제목 + 한줄 서브타이틀 + 브랜드명</li>
+              <li>내지: 챕터 타이틀페이지 + 본문 페이지</li>
+              <li>마지막 페이지: "Get more at [gumroad URL]" CTA</li>
+              <li>Export: PDF Standard (인쇄 아닌 화면용)</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      <div class="tools-row">
+        <span class="tool-chip">Claude AI</span>
+        <span class="tool-chip">Grammarly</span>
+        <span class="tool-chip">Hemingway</span>
+        <span class="tool-chip">Canva</span>
+        <span class="tool-chip">Reddit</span>
+      </div>
+    </div>
+
+    <!-- PHASE 2 CARD -->
+    <div class="phase-card">
+      <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--phase2);"></div>
+      <div class="phase-card-header">
+        <div class="phase-card-title-group">
+          <div class="phase-card-eyebrow" style="color:var(--phase2)">Phase 2 · Week 7–8</div>
+          <div class="phase-card-title">Launch<br>첫 출시</div>
+        </div>
+        <div class="phase-card-timespan" style="color:var(--phase2); border-color:var(--phase2);">2 WKS</div>
+      </div>
+      <ul class="task-list">
+        <li class="task-item">
+          <span class="task-num">11</span>
+          <div class="task-content">
+            <div class="task-title-main">Gumroad 상품 페이지 작성</div>
+            <div class="task-desc">세일즈 카피가 <strong>80%</strong>. 내용 설명보다 독자의 고통·욕망 건드리기.</div>
+            <ul class="subtask-list">
+              <li>제목: 숫자 or 질문형으로 (Why She's Actually Mad…)</li>
+              <li>서브타이틀: "The brain science behind [problem]"</li>
+              <li>불릿 5개: "After reading this, you will…"</li>
+              <li>가격: $9–12 (첫 책은 낮게 시작)</li>
+              <li>미리보기: 챕터1 첫 2페이지 공개</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">12</span>
+          <div class="task-content">
+            <div class="task-title-main">Medium 무료 챕터 발행</div>
+            <div class="task-desc">챕터 1 전체를 Medium에 무료 공개. <strong>마지막 문단에만 Gumroad 링크.</strong> 구걸 금지.</div>
+            <ul class="subtask-list">
+              <li>제목 A/B: 두 버전 작성 후 더 클릭될 것 선택</li>
+              <li>태그: psychology, self-improvement, brain, habits</li>
+              <li>Medium Partner Program 신청 (부수입 가능)</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">13</span>
+          <div class="task-content">
+            <div class="task-title-main">Reddit 가치글 3개 작성</div>
+            <div class="task-desc"><strong>절대 홍보 금지.</strong> 진짜 가치 있는 글 올리고 → 댓글에서 자연스럽게 링크 언급.</div>
+            <ul class="subtask-list">
+              <li>r/selfimprovement: "I studied 50 arguments…" 형식</li>
+              <li>r/psychology: 뇌과학 설명글</li>
+              <li>r/relationship_advice: 고민 답변 형식</li>
+              <li>프로필 bio에 Gumroad 링크만 걸어두기</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">14</span>
+          <div class="task-content">
+            <div class="task-title-main">X 스레드 주 2회 발행</div>
+            <div class="task-desc">포맷: "Your brain does X when Y happens. Here's why: 🧵" → <strong>10개 트윗 스레드</strong></div>
+            <ul class="subtask-list">
+              <li>스레드 마지막에 Gumroad 링크</li>
+              <li>리트윗·좋아요 많은 계정에 의미있는 댓글 달기</li>
+              <li>Buffer 또는 Typefully로 예약 발행</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">15</span>
+          <div class="task-content">
+            <div class="task-title-main">첫 판매 목표: 10부</div>
+            <div class="task-desc">숫자보다 <strong>구매 행동 데이터</strong>가 목표. 어디서 유입됐는지 파악.</div>
+            <ul class="subtask-list">
+              <li>Gumroad Analytics에서 트래픽 소스 확인</li>
+              <li>구매자 이메일 리스트 수집 시작</li>
+              <li>리뷰 요청 이메일 자동화 (Gumroad 기본 제공)</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      <div class="tools-row">
+        <span class="tool-chip">Gumroad</span>
+        <span class="tool-chip">Medium</span>
+        <span class="tool-chip">Reddit</span>
+        <span class="tool-chip">X/Twitter</span>
+        <span class="tool-chip">Typefully</span>
+      </div>
+    </div>
+
+    <!-- PHASE 3 CARD -->
+    <div class="phase-card">
+      <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--phase3);"></div>
+      <div class="phase-card-header">
+        <div class="phase-card-title-group">
+          <div class="phase-card-eyebrow" style="color:var(--phase3)">Phase 3 · Month 3–4</div>
+          <div class="phase-card-title">Grow<br>시리즈 확장</div>
+        </div>
+        <div class="phase-card-timespan" style="color:var(--phase3); border-color:var(--phase3);">2 MOS</div>
+      </div>
+      <ul class="task-list">
+        <li class="task-item">
+          <span class="task-num">16</span>
+          <div class="task-content">
+            <div class="task-title-main">독자 피드백 분석</div>
+            <div class="task-desc">구매자 리뷰·DM 읽기. <strong>"이 부분 더 알고 싶어요"</strong> 가 다음 책 주제.</div>
+            <ul class="subtask-list">
+              <li>Gumroad 리뷰 전수 읽기</li>
+              <li>Reddit 댓글에서 독자 반응 파악</li>
+              <li>X DM으로 "뭐가 제일 유용했나요?" 물어보기</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">17</span>
+          <div class="task-content">
+            <div class="task-title-main">두 번째 책 집필</div>
+            <div class="task-desc">1권 경험으로 <strong>속도 2배</strong> 가능. 1권과 시리즈 느낌으로 연결.</div>
+            <ul class="subtask-list">
+              <li>표지 디자인 통일 (시리즈 브랜딩)</li>
+              <li>1권 구매자에게 2권 얼리버드 이메일 발송</li>
+              <li>가격: $11–14 (점진적 가격 상승)</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">18</span>
+          <div class="task-content">
+            <div class="task-title-main">Substack 뉴스레터 시작</div>
+            <div class="task-desc">주 1회 "Brain Byte" 형식 뉴스레터. <strong>무료 구독 → 책 구매 전환</strong> 깔때기.</div>
+            <ul class="subtask-list">
+              <li>Substack 브랜드 계정 생성</li>
+              <li>포맷: 짧은 뇌과학 인사이트 1개 + 책 링크</li>
+              <li>Medium 독자에게 구독 CTA 추가</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">19</span>
+          <div class="task-content">
+            <div class="task-title-main">번들 상품 만들기</div>
+            <div class="task-desc">책 2권 + 보너스 체크리스트 PDF 묶어서 <strong>30% 할인</strong>으로 판매.</div>
+            <ul class="subtask-list">
+              <li>Gumroad "Bundle" 기능으로 묶기</li>
+              <li>보너스: 1페이지 요약 체크리스트 PDF 제작</li>
+              <li>번들 가격: 개별 합산의 65-70% 수준</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      <div class="tools-row">
+        <span class="tool-chip">Substack</span>
+        <span class="tool-chip">Gumroad Bundle</span>
+        <span class="tool-chip">Claude AI</span>
+        <span class="tool-chip">Canva</span>
+      </div>
+    </div>
+
+    <!-- PHASE 4 CARD -->
+    <div class="phase-card">
+      <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--phase4);"></div>
+      <div class="phase-card-header">
+        <div class="phase-card-title-group">
+          <div class="phase-card-eyebrow" style="color:var(--phase4)">Phase 4 · Month 5–6</div>
+          <div class="phase-card-title">Scale<br>$1K 달성</div>
+        </div>
+        <div class="phase-card-timespan" style="color:var(--phase4); border-color:var(--phase4);">2 MOS</div>
+      </div>
+      <ul class="task-list">
+        <li class="task-item">
+          <span class="task-num">20</span>
+          <div class="task-content">
+            <div class="task-title-main">세 번째 책 + 시리즈 완성</div>
+            <div class="task-desc">3권 완성되면 <strong>"The Complete Brain Science Bundle"</strong> 3권 묶음 출시.</div>
+            <ul class="subtask-list">
+              <li>3권 커버 시리즈 디자인 통일</li>
+              <li>전체 번들 가격: $29–34</li>
+              <li>각 책에 "Part 1 of 3" 표시</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">21</span>
+          <div class="task-content">
+            <div class="task-title-main">Medium SEO 최적화</div>
+            <div class="task-desc">기존 글 업데이트 + 새 글로 <strong>유기적 검색 트래픽</strong> 늘리기.</div>
+            <ul class="subtask-list">
+              <li>가장 조회수 높은 글 리프레시</li>
+              <li>검색 잘 되는 제목으로 A/B 변경</li>
+              <li>월 4개 새 아티클 목표</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">22</span>
+          <div class="task-content">
+            <div class="task-title-main">구매자 이메일 리스트 활용</div>
+            <div class="task-desc">100명 이상 쌓이면 <strong>신간 출시 이메일</strong>이 즉각 매출로 연결.</div>
+            <ul class="subtask-list">
+              <li>Gumroad 이메일 리스트 export</li>
+              <li>신간 출시 48시간 전 이메일 예고</li>
+              <li>구매자 전용 5% 추가 할인 쿠폰</li>
+            </ul>
+          </div>
+        </li>
+        <li class="task-item">
+          <span class="task-num">23</span>
+          <div class="task-content">
+            <div class="task-title-main">$1,000 달성 체크</div>
+            <div class="task-desc">누적 $1,000 = 이 모델이 <strong>검증된 것.</strong> 이후 자동화·스케일링 단계로 이동.</div>
+            <ul class="subtask-list">
+              <li>어느 채널이 가장 효과적이었는지 분석</li>
+              <li>가장 잘 팔린 책 → 광고비 $50 투자 테스트</li>
+              <li>다음 목표: $5K/month 로드맵 작성</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      <div class="tools-row">
+        <span class="tool-chip">Gumroad Analytics</span>
+        <span class="tool-chip">Medium</span>
+        <span class="tool-chip">Email List</span>
+        <span class="tool-chip">Canva</span>
+      </div>
+    </div>
+
+  </div><!-- end grid -->
+</div><!-- end detail section -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">THE PATTERN FINDER PROJECT · CONFIDENTIAL ROADMAP · 2026</div>
+  <div class="footer-right">From idea to first $1,000 — anonymously, globally, deliberately.</div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Subtle entrance animation for task rows
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }, i * 40);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.task-row, .phas
