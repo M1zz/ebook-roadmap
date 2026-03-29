@@ -1,4 +1,4 @@
-# Anonymous Ebook Brand · Roadmap
+# Ebook Brand · Roadmap
 
 Private execution roadmap for the anonymous English ebook brand project.
 
