@@ -2,6 +2,8 @@
 
 Private execution roadmap for the anonymous English ebook brand project.
 
+**Live site:** https://m1zz.github.io/ebook-roadmap/
+
 ## Pages
 
 - **`index.html`** — Visual 6-month timeline (Gantt-style)
